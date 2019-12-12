@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<launch>
+ 	<node pkg="cfswarm"    type="avoidance"	 	name="avoidance" 	output="screen"/>
+	<group ns="cf1">
+		 <node pkg="cfswarm" type="takeoff" 		name="takeoff" 		output="screen"/>
+		 <node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" type="potentialfield" 	name="potentialfield" 	output="screen"/>		
+	</group>
+
+	<group ns="cf2">
+		 <node pkg="cfswarm" type="takeoff" 		name="takeoff" 		output="screen"/>
+		 <node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" type="potentialfield" 	name="potentialfield" 	output="screen"/>
+	</group>
+
+	<group ns="cf3">
+		 <node pkg="cfswarm" type="takeoff" 		name="takeoff" 		output="screen"/>
+		 <node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" type="potentialfield" 	name="potentialfield" 	output="screen"/>
+	</group>
+
+	<group ns="cf4">
+		 <node pkg="cfswarm" type="takeoff" 		name="takeoff" 		output="screen"/>
+		 <node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" type="potentialfield" 	name="potentialfield" 	output="screen"/>
+	</group>
+
+</launch>

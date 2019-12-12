@@ -1,0 +1,13 @@
+material image/fieldmap
+{
+ technique
+ {
+  pass
+  {
+   texture_unit
+   {
+      texture fieldmap.png 	 
+   }
+  }
+ }
+}

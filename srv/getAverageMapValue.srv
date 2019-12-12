@@ -1,0 +1,6 @@
+#request constants
+int64 posX
+int64 posY
+------------
+#response constants
+float64 S
