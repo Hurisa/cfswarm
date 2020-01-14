@@ -8,12 +8,18 @@ add_compile_options(-std=c++11)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  gazebo_ros
+  gazebo_ros_control
+  geometry_msgs
   roscpp
   rospy
   std_msgs
   crazyflie_driver
   actionlib_msgs
+  tf
+  tf2_msgs
   message_generation
+  rosbag
 )
 
 ## System dependencies are found with CMake's conventions
@@ -50,11 +56,10 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  posevector.msg
+)
 
 ## Generate services in the 'srv' folder
  add_service_files(
@@ -73,6 +78,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
    DEPENDENCIES
+   geometry_msgs
    std_msgs
  )
 
@@ -105,7 +111,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(CATKIN_DEPENDS message_runtime catkin)
+catkin_package(CATKIN_DEPENDS message_runtime catkin rosbag)
 
 
 ###########
@@ -133,7 +139,10 @@ add_executable(controller     	src/controller.cpp)
 add_executable(potentialfield 	src/potentialfield.cpp)
 add_executable(localization   	src/localization.cpp)
 add_executable(takeoff		src/takeoff.cpp)
-add_executable(avoidance	src/avoidance.cpp)
+add_executable(avoidance		src/avoidance.cpp)
+add_executable(firefly		src/firefly.cpp)
+add_executable(saturation	src/saturation.cpp)
+add_executable(levy	src/levy.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -150,6 +159,9 @@ target_link_libraries(potentialfield 	${catkin_LIBRARIES} )
 target_link_libraries(localization 	${catkin_LIBRARIES} )
 target_link_libraries(takeoff		${catkin_LIBRARIES} )
 target_link_libraries(avoidance		${catkin_LIBRARIES} )
+target_link_libraries(firefly		${catkin_LIBRARIES} )
+target_link_libraries(saturation		${catkin_LIBRARIES} )
+target_link_libraries(levy		${catkin_LIBRARIES} )
 #############
 ## Install ##
 #############

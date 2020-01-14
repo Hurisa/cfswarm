@@ -15,7 +15,7 @@
 #include <crazyflie_driver/Position.h>
 #include <crazyflie_driver/Hover.h>
 #include <crazyflie_driver/GenericLogData.h>
-
+#include <std_msgs/Float32.h>
 
 #include <tf/transform_datatypes.h>
 #include <geometry_msgs/Quaternion.h>
@@ -39,10 +39,11 @@ private:
 
 		double x,y,z,yaw;
 
+
 		//ros::Publisher att_control_pub;
 		ros::Publisher vel_control_pub;
-
-
+		ros::Publisher bright_pub;
+		std_msgs::Float32 brightness_msg;
 		//Velocity messages
 
 		//Subscribers
@@ -50,13 +51,16 @@ private:
 	    ros::Subscriber pose_sub;
 		ros::Subscriber fieldvel_sub;
 		ros::Subscriber avoidvel_sub;
+		ros::Subscriber lightvel_sub;
+		ros::Subscriber saturation_sub;
+		ros::Subscriber levy_sub;
 	    //Services
 		ros::ServiceClient stop_client;                            //Stop service client
 		ros::ServiceClient takeoff_client;                         //Takeoff service client
 		ros::ServiceClient land_client;                            //Land service client
 		ros::ServiceClient update_params_client;                   //Update_params service client
 
-		ros::ServiceClient update_brightness_client;               //Update_params service client
+		//ros::ServiceClient update_brightness_client;               //Update_params service client
 		//position topic name
 		//std::string positionTopic="position";
 
@@ -66,11 +70,16 @@ private:
 		//brightness
 		double I;
 
+		//Saturation
+		double S;
+
 		//Velocity Components
-		crazyflie_driver::Hover avoid, field;
+		crazyflie_driver::Hover avoid, field, light, levy;
 
 		//angular gain and xvel
-		double Kw, xvel;
+		double Kw, xvel;	
+
+		int msg_seq;
 public:
 
 	cfCtrl(){
@@ -78,12 +87,16 @@ public:
 		ns = ros::this_node::getNamespace();
 
     	vel_control_pub = nh.advertise<crazyflie_driver::Hover>("cmd_hover", 10, this);
+    	bright_pub = nh.advertise<std_msgs::Float32>("brightness", 10, this);
 
     	//Subsricbers
     	joy_sub =nh.subscribe<sensor_msgs::Joy>("joy",10,&cfCtrl::joy_callback,this);
     	pose_sub = nh.subscribe("cfpose",10,&cfCtrl::pos_callback,this);
     	fieldvel_sub = nh.subscribe("fieldVel", 10, &cfCtrl::getFieldVel, this);
     	avoidvel_sub = nh.subscribe("avoidVel", 10, &cfCtrl::getAvoidVel, this);
+    	lightvel_sub = nh.subscribe("fireVel", 10, &cfCtrl::getLightVel, this);
+    	saturation_sub = nh.subscribe("saturation", 10, &cfCtrl::getSaturation, this);
+    	//levy_sub = nh.subscribe("levyVel", 10, &cfCtrl::getLevy, this);
     	
     	//Services
     	takeoff_client = nh.serviceClient<crazyflie_driver::Takeoff>("takeoff");
@@ -91,75 +104,201 @@ public:
     	stop_client = nh.serviceClient<crazyflie_driver::Stop>("stop");
     	update_params_client =  nh.serviceClient<crazyflie_driver::UpdateParams>("update_params");
 
-    	update_brightness_client=nh.serviceClient<cfswarm::getAverageMapValue>("/getAverageMapValue");
+    	//update_brightness_client=nh.serviceClient<cfswarm::getAverageMapValue>("/getAverageMapValue");
 
-    	Kw=50;
-    	xvel=0.3;
+    	Kw=80;
+    	nh.getParam("/xvel", xvel);
+
+    	msg_seq=0;
     
 
 	}
 
 	void getFieldVel(const geometry_msgs::Twist& msg){
 		crazyflie_driver::Hover vel;
+		vel.header.stamp = ros::Time::now();
 		vel.vx=xvel; vel.vy=0.0; vel.zDistance=0.5;
 		//cout<<msg.angular.z<<endl;
 		if (msg.angular.z!=0){			//vel.vx=0; 	
 			
 			vel.yawrate=-msg.angular.z*Kw;
-			cout<<"field vel: "<<vel.yawrate<<endl;
+			//cout<<"field vel: "<<vel.yawrate<<endl;
 		}
 		else{			
-			vel.yawrate=0.0;		}
+			vel.yawrate=0.0;		
+		}
 		field=vel;
+		msg_seq+=1;
 		//vel_control_pub.publish(vel);
 
 	}
 
 	void getAvoidVel(const geometry_msgs::Twist& msg){
 		crazyflie_driver::Hover vel;
+		vel.header.stamp = ros::Time::now();
 		 vel.vx=xvel; vel.vy=0.0; vel.zDistance=0.5;
 		//cout<<msg.angular.z<<endl;
 		if (msg.angular.z!=0){
 				
 			//vel.vx=0; 			
 			vel.yawrate=-msg.angular.z*Kw;
-			cout<<"avoid vel: "<<vel.yawrate<<endl;
+			//cout<<"avoid vel: "<<vel.yawrate<<endl;
 		}
 		else{			
 			vel.yawrate=0.0;
 		}
 		avoid=vel;
+		msg_seq+=1;
 		//vel_control_pub.publish(vel);
 
 	}
 
+	void getLightVel(const geometry_msgs::Twist& msg){
+		crazyflie_driver::Hover vel;
+		vel.header.stamp = ros::Time::now();
+		 vel.vx=xvel; vel.vy=0.0; vel.zDistance=0.5;
+		//cout<<msg.angular.z<<endl;
+		if (msg.angular.z!=0){
+				
+			//vel.vx=0; 			
+			vel.yawrate=(1-Saturation())*(-msg.angular.z*Kw);
+			//cout<<"light vel: "<<vel.yawrate<<endl;
+		}
+		else{			
+			vel.yawrate=0.0;
+		}
+		light=vel;
+		msg_seq+=1;
+		//vel_control_pub.publish(vel);
+
+	}
+
+	void getLevy(const geometry_msgs::Twist& msg){
+		crazyflie_driver::Hover vel;
+		vel.header.stamp = ros::Time::now();
+		vel.vx=xvel; vel.vy=0.0; vel.zDistance=0.5;
+		//cout<<msg.angular.z<<endl;
+		if (msg.angular.z!=0){
+				
+			//vel.vx=0; 			
+			vel.yawrate=-msg.angular.z*Kw;
+			if (vel.yawrate>60){
+				vel.yawrate=60;
+			}
+			else if (vel.yawrate<-60){
+				vel.yawrate=-60;
+			}
+			//cout<<"levy vel: "<<vel.yawrate<<endl;
+		}
+		else{			
+			vel.yawrate=0.0;
+		}
+		levy=vel;
+		msg_seq+=1;
+
+
+	}
+
+	crazyflie_driver::Hover defaultVel(){
+		crazyflie_driver::Hover vel;
+		vel.header.stamp = ros::Time::now();
+		vel.vx=xvel; vel.vy=0.0; vel.zDistance=0.5;
+		vel.yawrate=0.0;
+		msg_seq+=1;
+		return vel;
+
+	}
+
 	void pos_callback(const geometry_msgs::Pose& msg){
-		cfswarm::getAverageMapValue brightness_srv;
-		brightness_srv.request.posX=int(round(msg.position.y*10));
-		brightness_srv.request.posY=int(round(msg.position.x*10));
-		update_brightness_client.call(brightness_srv);
-		//I=brightness_srv.response.S;
+		// cfswarm::getAverageMapValue brightness_srv;
+		// brightness_srv.request.posX=int(round(msg.position.y*10));
+		// brightness_srv.request.posY=int(round(msg.position.x*10));
+		// update_brightness_client.call(brightness_srv);
+		// I=brightness_srv.response.S;
+
 		x=msg.position.x;
 		y=msg.position.y;
 		z=msg.position.z;
+
+		// brightness_msg.data=I;
+
+		// bright_pub.publish(brightness_msg);
 	}
+
+	void getSaturation(const std_msgs::Float32& msg){
+		S=msg.data;
+	}
+
+	double Saturation(){
+		return S;
+	}
+
+	int getSeq(){
+		return msg_seq;
+	}
+
 
 	void joy_callback(const sensor_msgs::Joy::ConstPtr& msg){
 	//Will serve as emergency landing and take off for the real experiments
 	}	
 
 	void VelocityCmd(){
+		crazyflie_driver::Hover refvel;
+		refvel = defaultVel();
+		refvel.header.seq=msg_seq;
+		vel_control_pub.publish(refvel);
+
 		if (avoid.yawrate!=0){
-			vel_control_pub.publish(avoid);
-			cout<<"avoid vel: "<<avoid.yawrate<<endl;
-		}else{
-			cout<<"field vel: "<<field.yawrate<<endl;
-			vel_control_pub.publish(field);
+			refvel=avoid;
+			refvel.header.seq=msg_seq;
+			vel_control_pub.publish(refvel);
+			//cout<<ns<<" "<<"Avoiding "<<avoid.yawrate<<endl;
 		}
+		else{
+			if (field.yawrate!=0){
+				refvel=field;
+				refvel.header.seq=msg_seq;
+				//cout<<"zDist: "<<field.zDistance<<endl;
+				//cout<<"field vel: "<<field.yawrate<<endl;
+				vel_control_pub.publish(refvel);
+				//cout<<ns<<" "<<"Field "<<field.yawrate<<endl;
+			}
+			else{ 
+				if (levy.yawrate!=0){		
+					refvel=levy;
+					refvel.header.seq=msg_seq;	
+					//cout<<light.yawrate<<endl;
+					vel_control_pub.publish(refvel);
+					//cout<<ns<<" "<<"levy"<<endl;
+					//cout<<ns<<" "<<"levy "<<levy.yawrate<<endl;					
+				}
+				else{
+					if (light.yawrate!=0){		
+					refvel=light;	
+					refvel.header.seq=msg_seq;
+					//cout<<light.yawrate<<endl;
+					vel_control_pub.publish(refvel);
+					//cout<<ns<<" "<<"light"<<endl;
+					
+					}
+					else{
+					refvel = defaultVel();
+					refvel.header.seq=msg_seq;
+					vel_control_pub.publish(refvel);
+					//cout<<ns<<" "<<"defaultVel"<<endl;
+					}
+				}				
+			}
+
+		// }
+		// cout<<"--------------------"<<endl;
+		// cout<<ns<<" velx "<<vel.vx<<endl;
+		// cout<<ns<<" vely "<<vel.vy<<endl;
+		// cout<<ns<<" velt "<<vel.yawrate<<endl;
 
 
+		}
 	}
-
 };
 
 int main(int argc, char** argv)
@@ -167,10 +306,13 @@ int main(int argc, char** argv)
 	/* code */
 	ros::init(argc, argv, "controller");
 	cfCtrl crazy;
-	ros::Rate r(30);
-
+	ros::Rate r(100);
+	
 	while (ros::ok()){
+
+	
 		crazy.VelocityCmd();
+
 		ros::spinOnce();
 		r.sleep();
 	}

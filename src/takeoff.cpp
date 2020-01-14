@@ -61,6 +61,7 @@ public:
         takeoff_srv.request.duration = ros::Duration(takeoff_duration);
         takeoff_srv.request.groupMask = groupMask;
         takeoff_client.call(takeoff_srv);
+		ros::Duration(0.5).sleep();
 	}
 
 };
@@ -72,10 +73,10 @@ int main(int argc, char** argv)
 	cfCtrl crazy;
 	ros::Rate r(30);
 	crazy.takeoff();
-	while (ros::ok()){
+	// while (ros::ok()){
 
-		ros::spinOnce();
-		r.sleep();
-	}
+	// 	ros::spinOnce();
+	// 	r.sleep();
+	// }
 	return 0;
 }

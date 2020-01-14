@@ -22,6 +22,8 @@ private:
 	tf2::Matrix3x3 Rotation;
 	tf2::Quaternion Q;
 	double roll,pitch,yaw;
+
+	double radius;
 	
 public:
 
@@ -59,9 +61,9 @@ double getDistance(geometry_msgs::Pose p, geometry_msgs::Pose q){
 
 
 
-void ComputeVel(vector<Avoidance*> avoid){
+void ComputeVel(vector<Avoidance*> avoid, double d){
 
-double d;
+double dist;
 vector<double> Xc_avoid, Yc_avoid;
 float XSep, YSep;
 float Xc, Yc;
@@ -73,8 +75,8 @@ geometry_msgs::Twist p;
 
 		for(int j=0; j<avoid.size(); j++){
 			if(i!=j){
-				d=getDistance(avoid[i]->getPose(),avoid[j]->getPose());
-				if (d<1){
+				dist=getDistance(avoid[i]->getPose(),avoid[j]->getPose());
+				if (dist<d){
 					Xc_avoid.push_back(avoid[j]->getPose().position.x);
 					Yc_avoid.push_back(avoid[j]->getPose().position.y);
 				}
@@ -95,18 +97,18 @@ geometry_msgs::Twist p;
 
 			float dtheta=atan2(-vy,-vx);
 			if (abs(dtheta)>0.05 && dtheta>0){
-				p.angular.x=0; p.angular.y=0; p.angular.z=0.75*abs(dtheta);				
+				p.angular.x=0.0; p.angular.y=0.0; p.angular.z=0.75*abs(dtheta);				
 			}
 			else if(abs(dtheta)>0.05 && dtheta<0){
-				p.angular.x=0; p.angular.y=0; p.angular.z=-0.75*abs(dtheta);		
+				p.angular.x=0.0; p.angular.y=0.0; p.angular.z=-0.75*abs(dtheta);		
 			}
 			else{
-				p.angular.x=0; p.angular.y=0; p.angular.z=0;				
+				p.angular.x=0.0; p.angular.y=0.0; p.angular.z=0.0;				
 			}			
 			//p.linear.x=-0.2*vx; p.linear.y=-0.2*vy; p.linear.z=0;
 		}else{
-			p.linear.x=0; 	p.linear.y=0; 	p.linear.z=0;
-			p.angular.x=0; 	p.angular.y=0; 	p.angular.z=0;
+			p.linear.x=0.0; 	p.linear.y=0.0; 	p.linear.z=0.0;
+			p.angular.x=0.0; 	p.angular.y=0.0; 	p.angular.z=0.0;
 		}
 		avoid[i]->PublishMsg(p);
 	}
@@ -121,7 +123,9 @@ int main(int argc, char** argv)
 	ros::NodeHandle nh;
 
 	vector<string> namespaces;
-	nh.getParam("/namespaces", namespaces);
+	double d;
+	nh.getParam("/namespaces",  namespaces);
+	nh.getParam("/avoidRadius", d);
 
 	vector<Avoidance*> avoid;
 
@@ -133,7 +137,7 @@ int main(int argc, char** argv)
 	ros::Rate r(30);
 
 	while (ros::ok()){
-		ComputeVel(avoid);
+		ComputeVel(avoid,d);
 		ros::spinOnce();
 		r.sleep();
 	}

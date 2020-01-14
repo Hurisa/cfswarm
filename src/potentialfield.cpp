@@ -92,7 +92,7 @@ int main(int argc, char** argv){
 	ros::init(argc, argv, "potential");	
 	PotentialField field;
 
-	ros::Rate r(30);
+	ros::Rate r(10);
 	while(ros::ok()){
 
 		

@@ -14,7 +14,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <math.h>       /* cos */
+//#include <math.h>       /* cos */
 
 //#include <multi_ardrone_sim/posevector.h>
 
@@ -39,23 +39,33 @@ public:
 
 	localizer(){
 		ns=ros::this_node::getNamespace();
+		ns.erase(0,1);
+		//cout<<"Getting ns: "<<ns<<endl;
 		PoseSub = nh.subscribe("/gazebo/model_states", 10, &localizer::getIndex, this);
 		PosePub = nh.advertise<geometry_msgs::Pose>("cfpose", 10, this);
 	}
 
 	void getIndex(const gazebo_msgs::ModelStates::ConstPtr& msg){
-
+		string str;
+		//cout<<know_index<<endl;
 		if (!know_index){
 			int no_states = msg->name.size()-1;
 			int i(0);
+			//cout<<know_index<<endl;
 			while (!know_index){
-				if (ns=="/"+msg->name[i]){
+
+				// cout<<msg->name[i]<<endl;
+				str="/"+msg->name[i];
+				//cout<<ns<<" "<<str<<endl;
+				if (ns==str){
+					//cout<<" found ns "<<endl;
 					index=i;  know_index=true;
 				}
 				else{i++;}
 			}
 		}
 		else{
+			//cout<<"Gonna publish the pose"<<endl;
 			Pose=msg->pose[index];
 			PosePub.publish(Pose);
 		}

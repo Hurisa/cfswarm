@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<launch>
+	<rosparam command="load" 		file="$(find cfswarm)/config/namespaces.yaml" />
+	<rosparam command="load" 		file="$(find cfswarm)/config/limits.yaml" />	
+    <rosparam command="load" 		file="$(find cfswarm)/config/map.yaml" /> 
+
+    <param name="gamma"			    value="0.5" />
+    <param name="threshold"			    value="50.0" /> <!-- comms range in meters-->
+    <param name="avoidRadius"			value="1.0" />  <!-- avoidance radius -->
+    
+    <param name="miu"			value="2.8" /> <!-- Levy  parameter 	-->
+    <param name="rho"			value="0.0" /> <!-- CRW  parameter 	-->
+    <param name="Sfun"			value="0.0" /> <!-- Saturation function (0 means no saturation) 	-->
+    
+    <param name="xvel"			value="0.2" /> <!-- forward vel 	 	-->
+        
+    <include file="$(find cfswarm)/launch/cfswarm.launch" />
+    <!-- <include file="$(find crazyflie_gazebo)/launch/max_cf_sitl.launch" />  -->
+  
+    <node pkg="cfswarm"   type="getAverageMapServer.py" 		name="getAverageMapServer" 		output="screen"/> 
+	<node pkg="cfswarm"   type="firefly" 						name="firefly" 						output="screen"/> 
+ 
+  	<node pkg="rosbag" type="record" name="uav_pose" output="screen"
+			args="record -O $(find cfswarm)/bag/test
+				/SwarmPose /cf1/cmd_hover /cf2/cmd_hover /cf3/cmd_hover /cf4/cmd_hover /cf5/cmd_hover /cf6/cmd_hover /cf7/cmd_hover /cf8/cmd_hover"/> 
+	
+</launch>
