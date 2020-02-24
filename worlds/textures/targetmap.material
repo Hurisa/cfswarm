@@ -1,0 +1,13 @@
+material image/targetmap
+{
+ technique
+ {
+  pass
+  {
+   texture_unit
+   {
+      texture targetmap.png 	 
+   }
+  }
+ }
+}

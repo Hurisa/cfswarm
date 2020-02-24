@@ -2,7 +2,7 @@
 
 <launch>
   <arg name="mav_name" default="crazyflie"/>
-  <arg name="world_name" default="fieldmap"/>
+  <arg name="world_name" default="targetmap"/>
   <arg name="debug" default="false"/>
   <arg name="gui" default="true"/>
   <arg name="paused" default="false"/>
@@ -32,7 +32,7 @@
   <arg name="y_1" default="11.0" />
   <arg name="z_1" default="0.5" />
 
-  <!-- Arguments for second Crazyflie -->
+ <!--  
   <arg name="tf_prefix_2" default="$(arg cfPrefix)2" />
   <arg name="color_prop_front_2" default="Red" />
   <arg name="color_prop_back_2" default="Red" />
@@ -40,7 +40,7 @@
   <arg name="y_2" default="12.0" />
   <arg name="z_2" default="0.5" />
 
-  <!-- Arguments for third Crazyflie -->
+
   <arg name="tf_prefix_3" default="$(arg cfPrefix)3" />
   <arg name="color_prop_front_3" default="Green" />
   <arg name="color_prop_back_3" default="Green" />
@@ -77,7 +77,7 @@
   <arg name="y_7" default="11.5" />
   <arg name="z_7" default="0.5" />
   
- <!--  
+
   <arg name="tf_prefix_8" default="$(arg cfPrefix)8" />
   <arg name="color_prop_front_8" default="White" />
   <arg name="color_prop_back_8" default="White" />
@@ -138,7 +138,7 @@
       <arg name="z" default="$(arg z_1)"/>
     </include>
   </group>
-
+<!--
   <group ns="$(arg cfPrefix)2">
     <include file="$(find crazyflie_gazebo)/launch/spawn_mav.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
@@ -218,7 +218,7 @@
     </include>
   </group>
  
-<!-- 
+ 
            <group ns="$(arg cfPrefix)8">
     <include file="$(find crazyflie_gazebo)/launch/spawn_mav.launch">
       <arg name="mav_name" value="$(arg mav_name)" />

@@ -92,7 +92,7 @@ public:
 
 void attraction (vector<Firefly*> fireflies, double threshold, double gamma){
 
-double x,y,xf,yf,vx,vy;
+double x,y,xf,yf,vx,vy, sumI;
 double lightAngle,d,beta,alpha;
 tf2::Quaternion Q; tf2::Matrix3x3 Rotation;
 geometry_msgs::Twist v;
@@ -104,14 +104,14 @@ geometry_msgs::Twist v;
 		tf2::fromMsg(fireflies[i]->getPose().orientation, Q);
 		Rotation.setRotation(Q);
 				
-		lightAngle=0;
-
+		lightAngle=0.0;
+		sumI=0.0;
 		for(int j=0;j<fireflies.size();j++){
 			xf=fireflies[j]->getX(); yf=fireflies[j]->getY();
 			d=sqrt(pow(x-xf,2)+pow(y-yf,2));
 
 			if (d<threshold && i!=j){
-				
+		
 				if (fireflies[j]->getBrightness()>fireflies[i]->getBrightness()){								
 
 					tf2::Vector3 c(xf-x,yf-y,0);
@@ -123,14 +123,20 @@ geometry_msgs::Twist v;
 					//compute attractivness
 					beta=exp(-gamma*pow(d,2));
 					//compute turning angle
-					lightAngle=lightAngle+alpha;
-					//cout<<alpha<<" "<<endl;
+					lightAngle=lightAngle+beta*alpha;
+					sumI=sumI+beta;
+					
 					//cout<<fireflies[i]->getBrightness()<<" "<<fireflies[j]->getBrightness()<<endl;
 				}
 				else{
 					lightAngle=lightAngle;
 				}
+
 			}
+		}
+		
+		if (sumI>0.0){		
+			lightAngle=lightAngle/sumI;	
 		}
 
 		if (lightAngle<-PI ){
@@ -143,7 +149,7 @@ geometry_msgs::Twist v;
         v.linear.x=0.0; 	v.linear.y=0.0; 	v.linear.z=0.0;
         v.angular.x=0.0;  v.angular.y=0.0;  v.angular.z=lightAngle;
 		fireflies[i]->publishVel(v);
-
+		//cout<<"----------------------"<<endl;
                     
 	}
 	

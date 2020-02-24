@@ -210,19 +210,10 @@ public:
 	}
 
 	void pos_callback(const geometry_msgs::Pose& msg){
-		// cfswarm::getAverageMapValue brightness_srv;
-		// brightness_srv.request.posX=int(round(msg.position.y*10));
-		// brightness_srv.request.posY=int(round(msg.position.x*10));
-		// update_brightness_client.call(brightness_srv);
-		// I=brightness_srv.response.S;
-
 		x=msg.position.x;
 		y=msg.position.y;
 		z=msg.position.z;
 
-		// brightness_msg.data=I;
-
-		// bright_pub.publish(brightness_msg);
 	}
 
 	void getSaturation(const std_msgs::Float32& msg){
@@ -289,14 +280,6 @@ public:
 					}
 				}				
 			}
-
-		// }
-		// cout<<"--------------------"<<endl;
-		// cout<<ns<<" velx "<<vel.vx<<endl;
-		// cout<<ns<<" vely "<<vel.vy<<endl;
-		// cout<<ns<<" velt "<<vel.yawrate<<endl;
-
-
 		}
 	}
 };
@@ -306,7 +289,7 @@ int main(int argc, char** argv)
 	/* code */
 	ros::init(argc, argv, "controller");
 	cfCtrl crazy;
-	ros::Rate r(100);
+	ros::Rate r(80);
 	
 	while (ros::ok()){
 

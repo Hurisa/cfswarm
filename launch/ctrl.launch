@@ -5,7 +5,7 @@
 	<group ns="cf1">		
 		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
 	</group>
-		
+<!--			
 	<group ns="cf2">		
 		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
 	</group>
@@ -29,7 +29,7 @@
 	<group ns="cf7">		
 		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
 	</group>
-<!--	
+
 	<group ns="cf8">		
 		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
 	</group>

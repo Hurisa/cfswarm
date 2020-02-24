@@ -9,7 +9,7 @@
 		 <node pkg="cfswarm" type="saturation" 	name="saturation" 	output="screen"/>	
 		 <node pkg="cfswarm" type="levy" 		name="levy" 		output="screen"/>	 
 	</group>
-
+<!--	
 	<group ns="cf2">
 		
 		 <node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
@@ -58,7 +58,7 @@
 		 <node pkg="cfswarm" type="saturation" 	name="saturation" 	output="screen"/>	
 		 <node pkg="cfswarm" type="levy" 		name="levy" 		output="screen"/>	
 	</group>
-<!--	
+
 	<group ns="cf8">
 	 
 		 <node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
