@@ -59,6 +59,8 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   posevector.msg
+  arraypoints.msg
+  floatvector.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -143,6 +145,9 @@ add_executable(avoidance		src/avoidance.cpp)
 add_executable(firefly		src/firefly.cpp)
 add_executable(saturation	src/saturation.cpp)
 add_executable(levy	src/levy.cpp)
+add_executable(adaptivelevy	src/adaptivelevy.cpp)
+add_executable(TimeBasedlw	src/TimeBasedlw.cpp)
+add_executable(TimeBasedcontroller	src/TimeBasedcontroller.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -162,6 +167,9 @@ target_link_libraries(avoidance		${catkin_LIBRARIES} )
 target_link_libraries(firefly		${catkin_LIBRARIES} )
 target_link_libraries(saturation		${catkin_LIBRARIES} )
 target_link_libraries(levy		${catkin_LIBRARIES} )
+target_link_libraries(adaptivelevy		${catkin_LIBRARIES} )
+target_link_libraries(TimeBasedlw	${catkin_LIBRARIES} )
+target_link_libraries(TimeBasedcontroller	${catkin_LIBRARIES} )
 #############
 ## Install ##
 #############

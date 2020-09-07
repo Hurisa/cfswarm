@@ -2,7 +2,7 @@
 
 <launch>
   <arg name="mav_name" default="crazyflie"/>
-  <arg name="world_name" default="targetmap"/>
+  <arg name="world_name" default="sky"/>
   <arg name="debug" default="false"/>
   <arg name="gui" default="true"/>
   <arg name="paused" default="false"/>
@@ -26,36 +26,36 @@
 -->
   <!-- Arguments for first Crazyflie -->
   <arg name="tf_prefix_1" default="$(arg cfPrefix)1" />
-  <arg name="color_prop_front_1" default="Blue" />
+  <arg name="color_prop_front_1" default="Red" />
   <arg name="color_prop_back_1" default="Blue" />
-  <arg name="x_1" default="33.5" />
-  <arg name="y_1" default="11.0" />
+  <arg name="x_1" default="1.5" />
+  <arg name="y_1" default="0.5" />
   <arg name="z_1" default="0.5" />
 
- <!--  
+
   <arg name="tf_prefix_2" default="$(arg cfPrefix)2" />
   <arg name="color_prop_front_2" default="Red" />
   <arg name="color_prop_back_2" default="Red" />
-  <arg name="x_2" default="34.5" />
-  <arg name="y_2" default="12.0" />
+  <arg name="x_2" default="0.5" />
+  <arg name="y_2" default="0.5" />
   <arg name="z_2" default="0.5" />
 
 
   <arg name="tf_prefix_3" default="$(arg cfPrefix)3" />
   <arg name="color_prop_front_3" default="Green" />
   <arg name="color_prop_back_3" default="Green" />
-  <arg name="x_3" default="32.5" />
-  <arg name="y_3" default="10.0" />
+  <arg name="x_3" default="0.0" />
+  <arg name="y_3" default="0.0" />
   <arg name="z_3" default="0.5" />
 
-
+<!--	
   <arg name="tf_prefix_4" default="$(arg cfPrefix)4" />
   <arg name="color_prop_front_4" default="White" />
   <arg name="color_prop_back_4" default="White" />
-  <arg name="x_4" default="34.5" />
-  <arg name="y_4" default="10.0" />
+  <arg name="x_4" default="1.5" />
+  <arg name="y_4" default="1.5" />
   <arg name="z_4" default="0.5" />
-   
+  
   <arg name="tf_prefix_5" default="$(arg cfPrefix)5" />
   <arg name="color_prop_front_5" default="White" />
   <arg name="color_prop_back_5" default="White" />
@@ -105,7 +105,7 @@
   <!-- Some custom blocks for every crazyflie in the environment-->
   <rosparam>
       genericLogTopics: ["local_position","target_position"]
-      genericLogTopicFrequencies: [100,100]
+      genericLogTopicFrequencies: [10,10]
       genericLogTopic_local_position_Variables: ["stateEstimate.x", "stateEstimate.y", "stateEstimate.z", "stabilizer.roll", "stabilizer.pitch", "stabilizer.yaw"]
       genericLogTopic_target_position_Variables: ["posCtl.targetX", "posCtl.targetY", "posCtl.targetZ", "controller.roll", "controller.pitch", "controller.yaw"]
   </rosparam>
@@ -117,14 +117,14 @@
 
   <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find crazyflie_gazebo)/models"/>
   <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find crazyflie_gazebo)/models"/>
-  <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find cfswarm)/worlds"/>
+  <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find cfswarm)/worlds"/> 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find cfswarm)/worlds/$(arg world_name).world"/>
+  `<arg name="world_name" value="$(find cfswarm)/worlds/$(arg world_name).world"/>
     <arg name="debug" value="$(arg debug)" />
     <arg name="paused" value="$(arg paused)" />
     <arg name="gui" value="$(arg gui)" />
     <arg name="verbose" value="$(arg verbose)"/>
-  </include>
+  </include> 
 
   <group ns="$(arg cfPrefix)1">
     <include file="$(find crazyflie_gazebo)/launch/spawn_mav.launch">
@@ -138,7 +138,7 @@
       <arg name="z" default="$(arg z_1)"/>
     </include>
   </group>
-<!--
+
   <group ns="$(arg cfPrefix)2">
     <include file="$(find crazyflie_gazebo)/launch/spawn_mav.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
@@ -165,7 +165,7 @@
     </include>
   </group>
   
-
+<!--
    <group ns="$(arg cfPrefix)4">
     <include file="$(find crazyflie_gazebo)/launch/spawn_mav.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
@@ -279,7 +279,7 @@
       <arg name="enable_logging_packets" value="$(arg enable_logging_packets)"/>
     </include>
   </group>
-
+<!--
     <group ns="handler2">
     <include file="$(find crazyflie_gazebo)/launch/spawn_plugin.launch">
       <arg name="plugin_name" value="cfHandler2" />
@@ -299,7 +299,7 @@
       <arg name="enable_logging_packets" value="$(arg enable_logging_packets)"/>
     </include>
   </group>
-<!--
+
 
    <group ns="handler3">
     <include file="$(find crazyflie_gazebo)/launch/spawn_plugin.launch">

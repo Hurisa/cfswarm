@@ -1,6 +1,6 @@
 #request constants
-int64 posX
-int64 posY
+float64 posX
+float64 posY
 ------------
 #response constants
 float64 S

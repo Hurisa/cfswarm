@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<launch>
+	
+	<arg    name="argRunLength"	    	value="180" /> 
+	<param name="runTime"	    		value="$(arg argRunLength)" />
+	<node  pkg="adaptive" type="timer"     name="timer" output="screen"/>
+	
+	<node pkg="rosbag" type="record" name="bag" output="screen"
+			args="record --split --duration=$(arg argRunLength) -O /home/hugo/Desktop/crazy_catkin/src/cfswarm/results/simulation/TBLevy/gamma10/mu2.8/td1
+			/SwarmPose /SwarmBrightness /cf1/cfmu /cf2/cfmu /cf3/cfmu /cf1/cfbeta /cf2/cfbeta /cf3/cfbeta /cf1/jump /cf2/jump /cf3/jump /pointsFound "/> 			
+
+</launch>

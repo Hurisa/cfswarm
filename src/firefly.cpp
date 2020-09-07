@@ -15,16 +15,19 @@
 #include <geometry_msgs/TransformStamped.h>
 #include <cfswarm/getAverageMapValue.h>
 #include <cfswarm/posevector.h>
+#include <cfswarm/floatvector.h>
 #define PI 3.14159265
 using namespace std;
 
 class Firefly{
 
 private:
-	double I0, Xpos, Ypos;
+	double I0, Imax, Xpos, Ypos, points;
+	double beginTime, currentTime;
 	geometry_msgs::Pose Pose;
 
-	ros::Subscriber poseSub;
+
+	ros::Subscriber poseSub,PtsSub;
 	ros::Subscriber brightSub;
 
 	ros::Publisher  velToLightPub;
@@ -34,38 +37,69 @@ private:
 	ros::ServiceClient update_brightness_client;               //Update_params service client
 	cfswarm::getAverageMapValue brightness_srv;
 	
+	string decay;
 public:
 	Firefly(ros::NodeHandle nh, string ns, double swarmSize){
+
+		nh.getParam("/decay",decay);
+
 		poseSub=nh.subscribe(ns+"/cfpose",10,&Firefly::updatePose, this);
+		// cout<<"decay: "<<decay<<" "<<endl;
+		// cout<<"is linear? "<<decay.compare("linear")<<" "<<endl;
+		if(decay.compare("linear")==0){
+			cout<<"linear decay"<<endl;
+			PtsSub=nh.subscribe(ns+"/points",10,&Firefly::updateI0, this);
+		}else{
+			PtsSub=nh.subscribe(ns+"/cfbeta",10,&Firefly::updateI0mu, this);
+		}
 		//brightSub=nh.subscribe(ns+"/brightness",10,&Firefly::updateBrightness, this);
 		velToLightPub=nh.advertise<geometry_msgs::Twist>(ns+"/fireVel",10,this);
 		brightnessPub=nh.advertise<std_msgs::Float32>(ns+"/brightness",10,this);
-		
+		ros::Time time=ros::Time::now();
+		beginTime=time.toSec();
 
 		update_brightness_client=nh.serviceClient<cfswarm::getAverageMapValue>("/getAverageMapValue");
+		I0=0.0;
+		Imax=0.0;
 		
 	}
-
 	void updatePose(const geometry_msgs::Pose& msg){
-		Xpos=msg.position.x;
-		Ypos=msg.position.y;
+		 Xpos=msg.position.x;
+		 Ypos=msg.position.y;
 
-		Pose=msg;
+		 Pose=msg;
+	}
+	
+	void updateI0mu(const std_msgs::Float32& msg){
+		I0=msg.data;
+	}
 
-		brightness_srv.request.posX=int(round(msg.position.y*10));
-		brightness_srv.request.posY=int(round(msg.position.x*10));
-		update_brightness_client.call(brightness_srv);
-		I0=brightness_srv.response.S;
+
+	void updateI0(const std_msgs::Float32& msg){
+
+		points=msg.data;
+		if (points>0){
+			ros::Time time=ros::Time::now();
+			currentTime=time.toSec();
+			if(currentTime-beginTime<10e-6){
+				// I0=0;
+				// Imax=0;
+			}else{
+			I0=I0+points/(currentTime-beginTime);
+		;
+			}
+			beginTime=currentTime;
+		}
+		else{
+			
+			I0=max(I0-1,0.0);
+		}
 
 		std_msgs::Float32 brightmsg;
 		brightmsg.data=I0;
 		brightnessPub.publish(brightmsg);
 
 	}
-
-	// void updateBrightness(const std_msgs::Float32 b){
-	// 	I0=b.data;
-	// }
 
 	double getX(){
 		return Xpos;
@@ -166,15 +200,17 @@ int main(int argc, char** argv)
 	vector<string> namespaces;
 
 	ros::Publisher  SwarmPosePub = nh.advertise<cfswarm::posevector>("/SwarmPose",10);
+	ros::Publisher  SwarmBrightnessPub = nh.advertise<cfswarm::floatvector>("/SwarmBrightness",10);
 
-	cfswarm::posevector PoseVector;
-	
+	cfswarm::posevector 	PoseVector;
+	cfswarm::floatvector 	BrightnessVector;
 	
 	nh.getParam("/namespaces", namespaces);
 	nh.getParam("/threshold", threshold);
 	nh.getParam("/gamma", gamma);
 
 	PoseVector.poses.resize(namespaces.size());
+	BrightnessVector.values.resize(namespaces.size());
 	vector<Firefly*> fireflies;
 	for (int i = 0; i < namespaces.size(); i++){
 		fireflies.push_back(new Firefly(nh, namespaces[i], namespaces.size()));		
@@ -191,9 +227,10 @@ int main(int argc, char** argv)
 		for (int i = 0; i < namespaces.size(); i++)
 		{
 			PoseVector.poses[i]=fireflies[i]->getPose();
+			BrightnessVector.values[i].data=fireflies[i]->getBrightness();
 		}
 		SwarmPosePub.publish(PoseVector);
-
+		SwarmBrightnessPub.publish(BrightnessVector);
 		ros::spinOnce();
 		r.sleep();
 	}

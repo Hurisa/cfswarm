@@ -25,9 +25,9 @@
 using namespace std;
 
 // Takeoff and landing parameters
-double takeoff_height = 0.5; // meters
+double takeoff_height = 0.2; // meters
 double takeoff_duration = 2.0; // seconds
-double land_duration = 4.0; //seconds
+double land_duration = 2.0; //seconds
 int groupMask = 0;
 
 class cfCtrl{
@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 	// while (ros::ok()){
 
 	// 	ros::spinOnce();
-	// 	r.sleep();
+	//  	r.sleep();
 	// }
-	return 0;
+	//return 0;
 }

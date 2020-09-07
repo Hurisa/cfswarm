@@ -3,21 +3,21 @@
 <launch>
  	
 	<group ns="cf1">		
-		<node pkg="cfswarm" type="takeoff" 		name="takeoff" 		output="screen"/>
+		<node pkg="adaptive"  type="takeoffSingle" name="takeoff" 		output="screen"/>
 	</group>
-<!--	
+
 	<group ns="cf2">		
-		<node pkg="cfswarm" type="takeoff" 		name="takeoff" 		output="screen"/>	
+		<node pkg="adaptive"  type="takeoffSingle" name="takeoff" 		output="screen"/>
 	</group>
 
 	<group ns="cf3">		
-		<node pkg="cfswarm" type="takeoff" 		name="takeoff" 		output="screen"/>
+		<node pkg="adaptive"  type="takeoffSingle" name="takeoff" 		output="screen"/>
+	</group>
+	<!--	
+	<group ns="cf4">		
+		<node pkg="adaptive"  type="takeoffSingle" name="takeoff" 		output="screen"/>
 	</group>
 
-	<group ns="cf4">		
-		<node pkg="cfswarm" type="takeoff" 		name="takeoff" 		output="screen"/>
-	</group>
-	
 	<group ns="cf5">		
 		<node pkg="cfswarm" type="takeoff" 		name="takeoff" 		output="screen"/>
 	</group>

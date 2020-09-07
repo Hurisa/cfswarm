@@ -5,32 +5,30 @@
   
 	<group ns="cf1">
 		<node pkg="adaptive" 	type="localize" 	    name="localization" 	output="screen"/>		
+		<node pkg="adaptive" 	type="hormone" 	    name="hormone" 	output="screen"/>	
 		<node pkg="cfswarm" 	type="potentialfield" 	name="potentialfield" 	output="screen"/>	
-		<node pkg="adaptive" 	type="lw" 			name="lw"			output="screen"/>	 
-		<node pkg="adaptive" 	type="hormone"	 	name="hormone"		output="screen"/>	
+		<node pkg="cfswarm" 	type="TimeBasedlw"	name="TimeBasedlw"	output="screen"/>	 
+		
 	<!--	<node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
 		 <node pkg="cfswarm" type="potentialfield" 	name="potentialfield" 	output="screen"/>		
 		 <node pkg="cfswarm" type="saturation" 	name="saturation" 	output="screen"/>	
 		 <node pkg="cfswarm" type="adaptivelevy" 	name="adaptivelevy" 	output="screen"/>	 -->
 	</group>
 
-	<group ns="cf2">
-		
-		 <node pkg="adaptive" 	type="localize" 	    name="localization" 	output="screen"/>	
-		 <node pkg="cfswarm" 	type="potentialfield" 	name="potentialfield" 	output="screen"/>	
-		 <node pkg="adaptive" 	type="lw" 			name="lw"			output="screen"/>	 
-		 <node pkg="adaptive" 	type="hormone"	 	name="hormone"		output="screen"/>	
-
+	<group ns="cf2">		
+		<node pkg="adaptive" 	type="localize" 	    name="localization" 	output="screen"/>		
+		<node pkg="adaptive" 	type="hormone" 	    name="hormone" 	output="screen"/>	
+		<node pkg="cfswarm" 	type="potentialfield" 	name="potentialfield" 	output="screen"/>	
+		<node pkg="cfswarm" 	type="TimeBasedlw"	name="TimeBasedlw"	output="screen"/>	 
 	</group>
 
 	<group ns="cf3">
-		
-		 <node pkg="adaptive" 	type="localize" 	    name="localization" 	output="screen"/>	
-		 <node pkg="cfswarm" 	type="potentialfield" 	name="potentialfield" 	output="screen"/>	
-		 <node pkg="adaptive" 	type="lw" 			name="lw"			output="screen"/>	 
-		 <node pkg="adaptive" 	type="hormone"	 	name="hormone"		output="screen"/>	
+		<node pkg="adaptive" 	type="localize" 	    name="localization" 	output="screen"/>	
+		<node pkg="adaptive" 	type="hormone" 	    name="hormone" 	output="screen"/>		
+		<node pkg="cfswarm" 	type="potentialfield" 	name="potentialfield" 	output="screen"/>	
+		<node pkg="cfswarm" 	type="TimeBasedlw"	name="TimeBasedlw"	output="screen"/>	 
 	</group>
-	<!--	
+<!--	
 	<group ns="cf4">
 		
 		 <node pkg="adaptive" 	type="localize" 	    name="localization" 	output="screen"/>	

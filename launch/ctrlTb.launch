@@ -1,24 +1,24 @@
 <?xml version="1.0"?>
 
 <launch>
-	 
+
 	<group ns="cf1">		
-		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
+		 <node pkg="cfswarm" type="TimeBasedcontroller" name="controllerTb" output="screen"/>		
 	</group>
-		
+
 	<group ns="cf2">		
-		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
+		 <node pkg="cfswarm" type="TimeBasedcontroller" name="controllerTb" output="screen"/>		
 	</group>
    
 	<group ns="cf3">		
-		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
+		 <node pkg="cfswarm" type="TimeBasedcontroller" name="controllerTb" output="screen"/>			
 	</group>
-		<include file="$(find cfswarm)/launch/bag.launch" />  
-<!--	
+	<include file="$(find cfswarm)/launch/bag.launch" />  
+	<!--	 
 	<group ns="cf4">		
 		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
 	</group>
-
+    
 	<group ns="cf5">		
 		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
 	</group>

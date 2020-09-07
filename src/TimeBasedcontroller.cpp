@@ -42,8 +42,8 @@ private:
 
 		//ros::Publisher att_control_pub;
 		ros::Publisher vel_control_pub;
-		ros::Publisher bright_pub;
-		std_msgs::Float32 brightness_msg;
+		//ros::Publisher bright_pub;
+		//std_msgs::Float32 brightness_msg;
 		//Velocity messages
 
 		//Subscribers
@@ -54,6 +54,7 @@ private:
 		ros::Subscriber lightvel_sub;
 		ros::Subscriber saturation_sub;
 		ros::Subscriber levy_sub;
+		ros::Subscriber brightness_sub;
 	    //Services
 		ros::ServiceClient stop_client;                            //Stop service client
 		ros::ServiceClient takeoff_client;                         //Takeoff service client
@@ -68,7 +69,7 @@ private:
 		std::string ns;
 
 		//brightness
-		double I;
+		double Inew, I;
 
 		//Saturation
 		double S;
@@ -77,7 +78,7 @@ private:
 		crazyflie_driver::Hover avoid, field, light, levy;
 
 		//angular gain and xvel
-		double Kw, xvel,height;
+		double Kw, xvel, xvelMax, xvelMin,height;
 
 		int msg_seq;
 
@@ -89,7 +90,7 @@ public:
 		ns = ros::this_node::getNamespace();
 
     	vel_control_pub = nh.advertise<crazyflie_driver::Hover>("cmd_hover", 10, this);
-    	bright_pub = nh.advertise<std_msgs::Float32>("brightness", 10, this);
+    	//bright_pub = nh.advertise<std_msgs::Float32>("brightness", 10, this);
 
     	//Subsricbers
     	joy_sub =nh.subscribe<sensor_msgs::Joy>("joy",10,&cfCtrl::joy_callback,this);
@@ -99,6 +100,7 @@ public:
     	lightvel_sub = nh.subscribe("fireVel", 10, &cfCtrl::getLightVel, this);
     	//saturation_sub = nh.subscribe("saturation", 10, &cfCtrl::getSaturation, this);
     	levy_sub = nh.subscribe("levyVel", 10, &cfCtrl::getLevy, this);
+    	brightness_sub = nh.subscribe("brightness", 10, &cfCtrl::getBrightness, this);
     	
     	//Services
     	takeoff_client = nh.serviceClient<crazyflie_driver::Takeoff>("takeoff");
@@ -108,16 +110,32 @@ public:
 
     	//update_brightness_client=nh.serviceClient<cfswarm::getAverageMapValue>("/getAverageMapValue");
 
-    	
+    	I=0.0;
+    	Inew=0.0;
     	
     	nh.getParam("/Kw", Kw);
     	nh.getParam("/xvel", xvel);
+    	nh.getParam("/xvelMax", xvelMax);
+    	nh.getParam("/xvelMin", xvelMin);
     	nh.getParam("/height", height);
+    	nh.getParam("/priority", priority);
 
     	msg_seq=0;
     	nh.setParam("/landcmd", false);
-    	nh.getParam("/priority", priority);
+    
 
+	}
+	void getBrightness(const std_msgs::Float32& msg){
+
+		Inew=msg.data;
+		if (I==0.0){
+			xvel=xvelMax;
+		}else{
+			//cout<<Inew-I/I<<endl;
+
+		xvel=max(xvelMin,min(xvel-(Inew-I)/I*xvel,xvelMax));
+		}
+		I=Inew;
 	}
 
 	void getFieldVel(const geometry_msgs::Twist& msg){
