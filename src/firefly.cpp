@@ -44,7 +44,7 @@ public:
 		nh.getParam("/decay",decay);
 
 		poseSub=nh.subscribe(ns+"/cfpose",10,&Firefly::updatePose, this);
-		// cout<<"decay: "<<decay<<" "<<endl;
+		// cout<<"decay: "<<decay<<" "<<endl;//
 		// cout<<"is linear? "<<decay.compare("linear")<<" "<<endl;
 		if(decay.compare("linear")==0){
 			cout<<"linear decay"<<endl;
