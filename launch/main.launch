@@ -3,9 +3,9 @@
 <launch>
 	<rosparam command="load" 		    file="$(find cfswarm)/config/namespaces.yaml" />
 	<rosparam command="load" 		    file="$(find adaptive)/config/limits.yaml" />	
-    <rosparam command="load" 		    file="$(find adaptive)/config/points4x3.yaml" />
+    <rosparam command="load" 		    file="$(find cfswarm)/config/2ClusterPoints4x3.yaml" />
 
-    <param name="gamma"			    value="10" />
+    <param name="gamma"			    value="1" />
     <param name="threshold"			    value="2" /> <!-- comms range in meters-->
     <param name="avoidRadius"			value="0.7" />  <!-- avoidance radius -->
     
@@ -17,7 +17,7 @@
 	<param name="height"				value="1.0" />  <!-- takeoff height 	 	-->
 	<param name="usevicon"				value="false" /> 
 	<param name="priority"				value="firefly" />
-	<param name="decay"				value="hormone" />
+	<param name="decay"				value="linear" />
 	<!--- Hormone parameters-->
 	<param name="muSettle"				value="1.625" />
 	<param name="a1"					value="0.503" />

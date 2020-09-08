@@ -3,7 +3,7 @@
 <launch>
 	<rosparam command="load" 		    file="$(find cfswarm)/config/namespaces.yaml" />
 	<rosparam command="load" 		    file="$(find adaptive)/config/limits.yaml" />	
-    <rosparam command="load" 		    file="$(find adaptive)/config/points4x3.yaml" />
+    <rosparam command="load" 		    file="$(find cfswarm)/config/2ClusterPoints4x3.yaml" />
 
     <param name="gamma"			    value="10" />
     <param name="threshold"			    value="2" /> <!-- comms range in meters-->

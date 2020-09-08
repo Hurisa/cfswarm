@@ -1,5 +1,5 @@
 close all;clear;clc;
-load('4x3map.mat')
+load('2Cluster4x3map.mat')
 rosshutdown;
 rosinit;
 
