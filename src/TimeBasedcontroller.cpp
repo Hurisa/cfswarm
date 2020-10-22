@@ -355,7 +355,7 @@ int main(int argc, char** argv)
 	/* code */
 	ros::init(argc, argv, "controller");
 	cfCtrl crazy;
-	ros::Rate r(80);
+	ros::Rate r(100);
 	
 	while (ros::ok()){
 

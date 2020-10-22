@@ -9,21 +9,24 @@
 	<group ns="cf2">		
 		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
 	</group>
-   
+  
 	<group ns="cf3">		
 		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
 	</group>
-	<!--	
-		<include file="$(find cfswarm)/launch/bag.launch" />  
 
 	<group ns="cf4">		
 		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
 	</group>
 
+	
+		<include file="$(find cfswarm)/launch/bag.launch" />
+	 <!--
 	<group ns="cf5">		
 		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
 	</group>
 	
+	 
+
 	<group ns="cf6">		
 		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
 	</group>

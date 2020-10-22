@@ -39,13 +39,13 @@ private:
 	double roll, pitch, yaw;
 	float w;
 	ros::NodeHandle nh;
-	ros::Subscriber PoseSub, adaptMuSub, adaptBetaSub;
+	ros::Subscriber PoseSub, adaptMuSub, adaptBetaSub, truncateSub;
 	ros::Publisher PubVel, PubState, PubJump;
 
 	// ros::ServiceClient hormone_client;               //Update_params service client
 	// cfswarm::getAverageMapValue hormone_srv;
 
-	bool changeTheta;
+	bool changeTheta, truncation;
 
 	string ns;
 	
@@ -56,6 +56,8 @@ public:
 	LevyBoid(){
 
 		PoseSub 		= nh.subscribe("cfpose"	, 10, &LevyBoid::getCurrentDistance, this);
+		truncateSub		= nh.subscribe("truncateWalk", 10, &LevyBoid::UpdateTruncation, this);
+
 		//adaptMuSub 		= nh.subscribe("cfmu"	, 10, &LevyBoid::UpdateMu, this);
 		//adaptBetaSub 	= nh.subscribe("cfbeta"	, 10, &LevyBoid::UpdateBeta, this);
 
@@ -88,6 +90,9 @@ public:
 	// 	jump=(1-beta)*jump;
 	// 	}
 	// }
+	void UpdateTruncation(const std_msgs::Bool msg){
+		truncation=msg.data;
+	}
 
 	void getCurrentDistance(const geometry_msgs::Pose& msg){
 		geometry_msgs::Pose LastPose=Pose;
@@ -107,12 +112,21 @@ public:
 		//cout<<" Jump at levy function "<<CurrentTime-BeginTime<<" "<<jump<<endl;
 		if (CurrentTime-BeginTime>=jump||isnan(jump))
 		{			
-			if(CurrentDistance>10e-6){
+			if(CurrentDistance>10e-4){
 			std_msgs::Float32 jumpMsg;
 			jumpMsg.data=CurrentDistance;
 			PubJump.publish(jumpMsg);			
 			}
 			genJump();
+		}
+		else if(CurrentDistance<jump && truncation){
+			std_msgs::Float32 jumpMsg;
+			if (CurrentDistance>10e-4){
+				jumpMsg.data=CurrentDistance;
+				PubJump.publish(jumpMsg);
+				CurrentDistance=0;
+			}
+
 		}
 	}
 

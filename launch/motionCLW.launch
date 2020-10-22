@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+
+<launch>
+ 	<node pkg="cfswarm"    type="avoidance"	 			name="avoidance" 			output="screen"/>
+ 	<node pkg="cfswarm"    type="avoidanceBigJumps"	 	name="avoidanceBigJumps" 	output="screen"/>  
+  
+	<group ns="cf1">
+		<node pkg="adaptive" 	type="localize" 	    name="localization" 	output="screen"/>		
+		<node pkg="cfswarm" 	type="potentialfield" 	name="potentialfield" 	output="screen"/>	
+		<node pkg="cfswarm" 	type="clw" 			name="clw"			output="screen"/>	 
+		<node pkg="cfswarm" 	type="levyswitch"	 	name="levyswitch"	output="screen"/>	
+	</group>
+
+	<group ns="cf2">
+		
+		 <node pkg="adaptive" 	type="localize" 	    name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" 	type="potentialfield" 	name="potentialfield" 	output="screen"/>	
+		 <node pkg="cfswarm" 	type="clw" 			name="clw"			output="screen"/>	 
+		 <node pkg="cfswarm" 	type="levyswitch"	 	name="levyswitch"	output="screen"/>	
+	</group>
+
+	<group ns="cf3">
+		
+		 <node pkg="adaptive" 	type="localize" 	    name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" 	type="potentialfield" 	name="potentialfield" 	output="screen"/>	
+		 <node pkg="cfswarm" 	type="clw" 			name="clw"			output="screen"/>	 
+		 <node pkg="cfswarm" 	type="levyswitch"	 	name="levyswitch"	output="screen"/>	
+	</group>
+	
+	<group ns="cf4">
+		
+		 <node pkg="adaptive" 	type="localize" 	    name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" 	type="potentialfield" 	name="potentialfield" 	output="screen"/>	
+		 <node pkg="cfswarm" 	type="clw" 			name="clw"			output="screen"/>	 
+		 <node pkg="cfswarm" 	type="levyswitch"	 	name="levyswitch"	output="screen"/>	
+
+	</group>
+	<!--		
+	<group ns="cf5">
+		
+		 <node pkg="adaptive" 	type="localize" 	    name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" 	type="potentialfield" 	name="potentialfield" 	output="screen"/>	
+		 <node pkg="adaptive" 	type="lw" 			name="lw"			output="screen"/>	 
+		 <node pkg="adaptive" 	type="hormone"	 	name="hormone"		output="screen"/>	
+	</group>
+
+
+	<group ns="cf6">
+	
+		 <node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" type="potentialfield" 	name="potentialfield" 	output="screen"/>
+		 <node pkg="cfswarm" type="saturation" 	name="saturation" 	output="screen"/>	
+		 <node pkg="cfswarm" type="levy" 		name="levy" 		output="screen"/>	
+	</group>
+	
+	<group ns="cf7">
+		
+		 <node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" type="potentialfield" 	name="potentialfield" 	output="screen"/>
+		 <node pkg="cfswarm" type="saturation" 	name="saturation" 	output="screen"/>	
+		 <node pkg="cfswarm" type="levy" 		name="levy" 		output="screen"/>	
+	</group>
+
+	<group ns="cf8">
+	 
+		 <node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" type="potentialfield" 	name="potentialfield" 	output="screen"/>
+		 <node pkg="cfswarm" type="saturation" 	name="saturation" 	output="screen"/>	
+		 <node pkg="cfswarm" type="levy" 		name="levy" 		output="screen"/>	
+	</group>
+
+
+	<group ns="cf9">
+		 <node pkg="cfswarm" type="takeoff" 		name="takeoff" 		output="screen"/>
+		 <node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" type="potentialfield" 	name="potentialfield" 	output="screen"/>
+		 <node pkg="cfswarm" type="saturation" 	name="saturation" 	output="screen"/>	
+		 <node pkg="cfswarm" type="levy" 		name="levy" 		output="screen"/>	
+	</group>
+	
+	<group ns="cf10">
+		 <node pkg="cfswarm" type="takeoff" 		name="takeoff" 		output="screen"/>
+		 <node pkg="cfswarm" type="localization" 	name="localization" 	output="screen"/>	
+		 <node pkg="cfswarm" type="potentialfield" 	name="potentialfield" 	output="screen"/>
+		 <node pkg="cfswarm" type="saturation" 	name="saturation" 	output="screen"/>	
+		 <node pkg="cfswarm" type="levy" 		name="levy" 		output="screen"/>	
+	</group>
+-->
+</launch>

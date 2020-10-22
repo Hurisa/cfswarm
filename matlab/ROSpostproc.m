@@ -1,10 +1,10 @@
 close all;
 clc;
 clear;
-load('4x3map.mat')
-type="hormone";
+load('D3SmallClusterPoints4x3.mat')
+type="04radiusD3SmallCl4CfCLW";
 saveFlag=true;
-printHeatmaps=true;
+printHeatmaps=false;
 disp('Opening Files...')
 Folder = uigetdir(pwd, strcat("Select a folder with ", type, " .bag files"));
 Files = dir(fullfile(strcat(Folder,'/'), '*.bag'));
@@ -32,14 +32,14 @@ end
 
 % printMetrics(nPoints,nClusters,Distance,Times,0.50)
 % printMetrics(nPoints,nClusters,Distance,Times,1.00)
-% if printHeatmaps
-%     %heatmap(nPosesMsg,PoseMsgs,0.25,N,x,y)
-%     heatmap(nPosesMsg,PoseMsgs,0.5,N,x,y)
-%     %heatmap(nPosesMsg,PoseMsgs,0.75,N,x,y)
-%     heatmap(nPosesMsg,PoseMsgs,1,N,x,y)
-% end
+if printHeatmaps
+    %heatmap(nPosesMsg,PoseMsgs,0.25,N,x,y)
+    heatmap(nPosesMsg,PoseMsgs,0.5,N,x,y)
+    %heatmap(nPosesMsg,PoseMsgs,0.75,N,x,y)
+    heatmap(nPosesMsg,PoseMsgs,1,N,x,y)
+end
 if saveFlag
-    save(strcat(Folder,"/swarm_",type,".mat")],'nPoints', 'nPosesMsg', 'Brightness')
+    save(strcat("swarm_",type,".mat"),'nPoints', 'nPosesMsg', 'Brightness');
 end
 %% heatmap
 function heatmap(nPosesMsg,PoseMsgs,p,N,xp,yp)

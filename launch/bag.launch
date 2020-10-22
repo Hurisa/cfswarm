@@ -7,7 +7,7 @@
 	<node  pkg="adaptive" type="timer"     name="timer" output="screen"/>
 	
 	<node pkg="rosbag" type="record" name="bag" output="screen"
-			args="record --split --duration=$(arg argRunLength) -O /home/hugo/Desktop/crazy_catkin/src/cfswarm/results/simulation/ELW_lineardecay/gamma1/elw
-			/SwarmPose /SwarmBrightness /cf1/cfmu /cf2/cfmu /cf3/cfmu /cf1/cfbeta /cf2/cfbeta /cf3/cfbeta /cf1/jump /cf2/jump /cf3/jump /pointsFound "/> 			
+			args="record --split --duration=$(arg argRunLength) -O /home/hugo/Desktop/crazy_catkin/src/cfswarm/results/D3clustersSmall/radius0.4/4cf/simulation/CLW/CLW
+			/SwarmPose /pointsFound /cf1/jump /cf2/jump /cf3/jump /cf4/jump "/> 			
 
 </launch>

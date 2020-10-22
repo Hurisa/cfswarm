@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/Twist.h>
+#include <std_msgs/Bool.h>
 #include <vector>
 #include <string>
 #include <math.h>  
@@ -16,7 +17,7 @@ class Avoidance{
 
 private:
 	ros::Subscriber poseSub;
-	ros::Publisher	avoidVel;
+	ros::Publisher	avoidVel,truncateWalk;
 	geometry_msgs::Pose Pose;
 	vector<double> distances;
 	tf2::Matrix3x3 Rotation;
@@ -30,6 +31,7 @@ public:
 	Avoidance(ros::NodeHandle nh, string ns, double swarmSize){
 		poseSub=nh.subscribe(ns+"/cfpose",10,&Avoidance::updatePose, this);
 		avoidVel=nh.advertise<geometry_msgs::Twist>(ns+"/avoidVel",10,this);
+		truncateWalk=nh.advertise<std_msgs::Bool>(ns+"/truncateWalk",10,this);
 		//distances.resize(swarmSize);	
 	}
 
@@ -42,6 +44,10 @@ public:
 
 	void PublishMsg(geometry_msgs::Twist p){
 		avoidVel.publish(p);
+	}
+
+	void Truncation(std_msgs::Bool q){
+		truncateWalk.publish(q);
 	}
 
 	geometry_msgs::Pose getPose(){
@@ -69,6 +75,7 @@ float XSep, YSep;
 float Xc, Yc;
 tf2::Vector3 v;
 geometry_msgs::Twist p;
+std_msgs::Bool q;
 
 	for(int i=0; i<avoid.size(); i++){		
 		Xc_avoid.resize(0); Yc_avoid.resize(0);
@@ -97,20 +104,25 @@ geometry_msgs::Twist p;
 
 			float dtheta=atan2(-vy,-vx);
 			if (abs(dtheta)>0.05 && dtheta>0){
-				p.angular.x=0.0; p.angular.y=0.0; p.angular.z=0.75*abs(dtheta);				
+				p.angular.x=0.0; p.angular.y=0.0; p.angular.z=0.75*abs(dtheta);		
+				q.data=true;		
 			}
 			else if(abs(dtheta)>0.05 && dtheta<0){
-				p.angular.x=0.0; p.angular.y=0.0; p.angular.z=-0.75*abs(dtheta);		
+				p.angular.x=0.0; p.angular.y=0.0; p.angular.z=-0.75*abs(dtheta);
+				q.data=true;		
 			}
 			else{
-				p.angular.x=0.0; p.angular.y=0.0; p.angular.z=0.0;				
+				p.angular.x=0.0; p.angular.y=0.0; p.angular.z=0.0;	
+				q.data=false;			
 			}			
 			//p.linear.x=-0.2*vx; p.linear.y=-0.2*vy; p.linear.z=0;
 		}else{
 			p.linear.x=0.0; 	p.linear.y=0.0; 	p.linear.z=0.0;
 			p.angular.x=0.0; 	p.angular.y=0.0; 	p.angular.z=0.0;
+			q.data=false;
 		}
 		avoid[i]->PublishMsg(p);
+		avoid[i]->Truncation(q);
 	}
 }
 
@@ -134,7 +146,7 @@ int main(int argc, char** argv)
 		avoid.push_back(new Avoidance(nh, namespaces[i], namespaces.size()));		
 	}
 
-	ros::Rate r(30);
+	ros::Rate r(100);
 
 	while (ros::ok()){
 		ComputeVel(avoid,d);

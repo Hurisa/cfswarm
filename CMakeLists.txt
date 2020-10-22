@@ -139,15 +139,16 @@ include_directories(${crazyflie_driver_INCLUDE_DIRS})
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(controller     	src/controller.cpp)
 add_executable(potentialfield 	src/potentialfield.cpp)
-add_executable(localization   	src/localization.cpp)
 add_executable(takeoff		src/takeoff.cpp)
 add_executable(avoidance		src/avoidance.cpp)
 add_executable(firefly		src/firefly.cpp)
-add_executable(saturation	src/saturation.cpp)
-add_executable(levy	src/levy.cpp)
-add_executable(adaptivelevy	src/adaptivelevy.cpp)
 add_executable(TimeBasedlw	src/TimeBasedlw.cpp)
 add_executable(TimeBasedcontroller	src/TimeBasedcontroller.cpp)
+add_executable(elw	src/elw.cpp)
+add_executable(levyswitch	src/levyswitch.cpp)
+add_executable(clw	src/clw.cpp)
+add_executable(avoidanceBigJumps	src/avoidanceBigJumps.cpp)
+add_executable(controllerCLW     	src/controllerCLW.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -161,15 +162,16 @@ add_executable(TimeBasedcontroller	src/TimeBasedcontroller.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(controller   	${catkin_LIBRARIES} )
 target_link_libraries(potentialfield 	${catkin_LIBRARIES} )
-target_link_libraries(localization 	${catkin_LIBRARIES} )
 target_link_libraries(takeoff		${catkin_LIBRARIES} )
 target_link_libraries(avoidance		${catkin_LIBRARIES} )
 target_link_libraries(firefly		${catkin_LIBRARIES} )
-target_link_libraries(saturation		${catkin_LIBRARIES} )
-target_link_libraries(levy		${catkin_LIBRARIES} )
-target_link_libraries(adaptivelevy		${catkin_LIBRARIES} )
 target_link_libraries(TimeBasedlw	${catkin_LIBRARIES} )
 target_link_libraries(TimeBasedcontroller	${catkin_LIBRARIES} )
+target_link_libraries(levyswitch	${catkin_LIBRARIES} )
+target_link_libraries(clw	${catkin_LIBRARIES} )
+target_link_libraries(elw	${catkin_LIBRARIES} )
+target_link_libraries(avoidanceBigJumps	${catkin_LIBRARIES} )
+target_link_libraries(controllerCLW   	${catkin_LIBRARIES} )
 #############
 ## Install ##
 #############

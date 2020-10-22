@@ -3,20 +3,20 @@
 <launch>
 	<rosparam command="load" 		    file="$(find cfswarm)/config/namespaces.yaml" />
 	<rosparam command="load" 		    file="$(find adaptive)/config/limits.yaml" />	
-    <rosparam command="load" 		    file="$(find cfswarm)/config/2ClusterPoints4x3.yaml" />
+    <rosparam command="load" 		    file="$(find cfswarm)/config/D3SmallClusterPoints4x3.yaml" />
 
-    <param name="gamma"			    value="1" />
+    <param name="gamma"			    value="0.01" />
     <param name="threshold"			    value="2" /> <!-- comms range in meters-->
-    <param name="avoidRadius"			value="0.7" />  <!-- avoidance radius -->
+    <param name="avoidRadius"			value="0.4" />  <!-- avoidance radius Original value:0.7-->
     
-    <param name="rho"					value="0.0" />  <!-- CRW  parameter 	-->
-	<param name="xvel"					value="0.2" />  <!-- forward vel 	 	-->
-	<param name="Kw"					value="100"/> <!-- Angular turning gain -->
-	<param name="sensingRadius"		value="0.1" /> 
-	<param name="scale"					value="10" /> 
-	<param name="height"				value="1.0" />  <!-- takeoff height 	 	-->
-	<param name="usevicon"				value="false" /> 
-	<param name="priority"				value="firefly" />
+    <param name="rho"					value="0.0" 		/>  <!-- CRW  parameter 	-->
+	<param name="xvel"					value="0.2" 		/>  <!-- forward vel 	 	-->
+	<param name="Kw"					value="100"		/> <!-- Angular turning gain -->
+	<param name="sensingRadius"		value="0.1" 		/> 
+	<param name="scale"					value="10" 		/> 
+	<param name="height"				value="1" 		/>  <!-- takeoff height 	 	-->
+	<param name="usevicon"				value="false" 	/> 
+	<param name="priority"				value="firefly" 	/>
 	<param name="decay"				value="linear" />
 	<!--- Hormone parameters-->
 	<param name="muSettle"				value="1.625" />
@@ -24,12 +24,11 @@
 	<param name="a2"					value="0.254" />
 	<param name="b1"					value="0.976" />
 	<param name="b2"					value="0.185" />  
-	
         
     <include file="$(find cfswarm)/launch/cfswarm.launch" />
 
-    <node pkg="cfswarm"    type="firefly" 			name="firefly" 		output="screen"/> 
-    <node pkg="cfswarm"   type="getAverageMapServer.py" 		name="getAverageMapServer" 		output="screen"/> 
+    <node pkg="cfswarm"    type="firefly" 							name="firefly" 						output="screen"/> 
+    <node pkg="cfswarm"    type="getAverageMapServer.py" 		name="getAverageMapServer" 		output="screen"/> 
 	
  
 </launch>

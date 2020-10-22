@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<launch>
+	 
+	<group ns="cf1">		
+		 <node pkg="cfswarm" type="controllerCLW" name="controllerCLW" output="screen"/>		
+	</group>
+		
+	<group ns="cf2">		
+		 <node pkg="cfswarm" type="controllerCLW" name="controllerCLW" output="screen"/>		
+	</group>
+   
+	<group ns="cf3">		
+		 <node pkg="cfswarm" type="controllerCLW" name="controllerCLW" output="screen"/>		
+	
+	</group>
+
+	<group ns="cf4">		
+		 <node pkg="cfswarm" type="controllerCLW" name="controllerCLW" output="screen"/>		
+	</group>
+	<include file="$(find cfswarm)/launch/bag.launch" />
+	<!--	
+
+	<group ns="cf5">		
+		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
+	</group>
+	
+	 
+
+	<group ns="cf6">		
+		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
+	</group>
+	
+	<group ns="cf7">		
+		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
+	</group>
+
+	<group ns="cf8">		
+		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
+	</group>
+
+
+	<group ns="cf9">		
+		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
+	</group>
+	
+	<group ns="cf10">		
+		 <node pkg="cfswarm" type="controller" name="controller" output="screen"/>		
+	</group>
+-->
+</launch>
